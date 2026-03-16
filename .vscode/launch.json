@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Alfie/Desktop/Convertus/Windows",
-      "program": "c:/Users/Alfie/Desktop/Convertus/Windows/build/Debug/outDebug",
+      "cwd": "c:/Users/Alfie/Desktop/Convertus/Flavours/Windows",
+      "program": "c:/Users/Alfie/Desktop/Convertus/Flavours/Windows/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
