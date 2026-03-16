@@ -10,7 +10,7 @@
 
 namespace fs = std::filesystem;
 
-const std::string VERSION = "Convertus 1.2";
+const std::string VERSION = "Convertus 2.0";
 
 // Show usage instructions
 void print_help() {
