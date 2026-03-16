@@ -10,11 +10,11 @@
 
 namespace fs = std::filesystem;
 
-const std::string VERSION = "Convertus 2.0 (MacOS)";
+const std::string VERSION = "Convertus v1.0.0 (Windows)";
 
 // Show usage instructions
 void print_help() {
-    std::cout << "Convertus CLI\n\n";
+    std::cout << "Convertus CLI (Windows)\n\n";
     std::cout << "Usage:\n";
     std::cout << "  Convertus -C <file1> [file2...] -T <extension> [-O <output_folder>] [-f]\n";
     std::cout << "  Convertus info -C <file1> [file2...]\n";
@@ -74,9 +74,9 @@ void info_file(const fs::path& file) {
 // Remove Convertus from system
 void uninstall_convertus() {
     std::cout << "Removing Convertus...\n";
-    fs::path bin = "/usr/local/bin/Convertus";
+    fs::path exe_path = fs::current_path() / "Convertus.exe";
 
-    if (fs::exists(bin)) fs::remove(bin);
+    if (fs::exists(exe_path)) fs::remove(exe_path);
 
     std::cout << "Convertus removed.\n";
 }
@@ -115,7 +115,7 @@ void convert_unit_command(double value, const std::string& from, const std::stri
         std::cout << "Unknown unit: " << from << " or " << to << "\n";
 }
 
-// Simple Levenshtein distance to find closest valid argument
+// Compute edit distance between two strings
 int levenshtein(const std::string &s1, const std::string &s2) {
     size_t m = s1.size(), n = s2.size();
     std::vector<std::vector<int>> dp(m+1,std::vector<int>(n+1));
@@ -130,7 +130,7 @@ int levenshtein(const std::string &s1, const std::string &s2) {
     return dp[m][n];
 }
 
-// Suggest closest valid argument
+// Suggest the closest valid argument to the user
 void suggest_command(const std::string& arg) {
     std::vector<std::string> valid_args = {"--help","--version","-C","-T","-O","-f","-Uninstall","info","-U"};
     std::string best_match;
@@ -154,7 +154,9 @@ int main(int argc, char* argv[]) {
 
     std::vector<std::string> files;
     std::string target;
-    fs::path output = fs::path(getenv("HOME")) / "Downloads";
+
+    // Default output is Downloads folder
+    fs::path output = fs::path(std::getenv("USERPROFILE")) / "Downloads";
     bool force = false;
     bool info_mode = false;
 
@@ -184,7 +186,7 @@ int main(int argc, char* argv[]) {
             return 0;
         }
         else {
-            // If unknown argument, suggest closest match
+            // Unknown arguments show suggestion
             suggest_command(arg);
             return 0;
         }
