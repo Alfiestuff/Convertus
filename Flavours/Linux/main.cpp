@@ -5,19 +5,17 @@
 #include <cstdlib>
 #include <chrono>
 #include <iomanip>
-#include <unordered_map>
-#include <cmath>
 
 namespace fs = std::filesystem;
 
-const std::string VERSION = "Convertus v1.0.0 (Linux)";
+const std::string VERSION = "Convertus v1.1.0 (Linux)";
 
 void print_help() {
     std::cout << "Convertus CLI (Linux)\n\n";
     std::cout << "Usage:\n";
-    std::cout << "  Convertus -C <file1> [file2...] -T <extension> [-O <output_folder>] [-f]\n";
-    std::cout << "  Convertus info -C <file1> [file2...]\n";
-    std::cout << "  Convertus -Uninstall\n\n";
+    std::cout << "  convertus -C <file1> [file2...] -T <extension> [-O <output_folder>] [-f]\n";
+    std::cout << "  convertus info -C <file1> [file2...]\n";
+    std::cout << "  convertus -Uninstall\n\n";
 
     std::cout << "Options:\n";
     std::cout << "  --help        Show this help message\n";
@@ -43,6 +41,11 @@ bool convert_file(const fs::path& input, const std::string& ext, const fs::path&
     try {
         fs::copy_file(input, out, fs::copy_options::overwrite_existing);
         std::cout << "Saved: " << out << "\n";
+
+        // Open with default app (Linux)
+        std::string cmd = "xdg-open \"" + out.string() + "\" > /dev/null 2>&1 &";
+        std::system(cmd.c_str());
+
         return true;
     } catch (...) {
         return false;
@@ -69,13 +72,16 @@ void info_file(const fs::path& file) {
 void uninstall_convertus() {
     std::cout << "Removing Convertus...\n";
 
-    fs::path exe_path = fs::current_path() / "Convertus";
+    fs::path exe_path = fs::path(std::getenv("HOME")) / ".local/bin/convertus";
 
     if (fs::exists(exe_path)) {
         fs::remove(exe_path);
+        std::cout << "Removed from ~/.local/bin\n";
+    } else {
+        std::cout << "Convertus not found in ~/.local/bin\n";
     }
 
-    std::cout << "Convertus removed.\n";
+    std::cout << "Done.\n";
 }
 
 int levenshtein(const std::string &s1, const std::string &s2) {
