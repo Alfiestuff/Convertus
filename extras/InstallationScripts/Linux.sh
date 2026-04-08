@@ -3,7 +3,7 @@
 set -e
 
 APP_NAME="convertus"
-REPO="Alfiestuff/convertus"
+REPO="Alfiestuff/Convertus"
 VERSION="v1.0.0"
 URL="https://github.com/$REPO/archive/refs/tags/$VERSION.tar.gz"
 
